@@ -39,7 +39,7 @@ export default function LoadingAIPage() {
         formData.append("file", blob, "foto-kamar.jpg");
 
         // 1. Tembak ke Python API! 🚀
-        const pythonRes = await fetch("https://agreeing-untangled-pacifier.ngrok-free.dev", {
+        const pythonRes = await fetch("https://agreeing-untangled-pacifier.ngrok-free.dev/analisis-foto", {
           method: "POST",
           body: formData
         });
