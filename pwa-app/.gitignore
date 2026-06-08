@@ -40,3 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 *.h5
+# Blokir file AI dan Ngrok lokal
+model_jamur.h5
+ngrok.exe
+*.old
+__pycache__/
