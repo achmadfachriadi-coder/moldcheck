@@ -19,25 +19,36 @@ export default function LoginPage() {
     setLoading(true);
     setPesanError('');
 
-if (isLogin) {
+    if (isLogin) {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setPesanError(error.message);
       else {
-        // 1. Baca label perannya dari Supabase
+        // Baca role dari Supabase metadata
         const userRole = data.user?.user_metadata?.role || 'penghuni';
-        
-        // 2. Simpan sebagai catatan di HP
         localStorage.setItem('userRole', userRole);
-        
-        // 3. PISAHKAN HALAMANNYA DI SINI
+
+        // Arahkan ke halaman yang sesuai
         if (userRole === 'admin') {
-          router.push('/dashboard-admin'); // Ganti dengan nama file dashboard penjaga kosmu
+          router.push('/dashboard-admin');
         } else {
-          router.push('/dashboard'); // Ganti dengan nama file kamera/beranda penghuni kosmu
+          router.push('/camera'); // Arahkan penghuni ke halaman kamera
         }
       }
     } else {
-      // ... (kodingan register di bawahnya biarkan sama)
+      const { error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: { data: { role: role } }
+      });
+      if (error) setPesanError(error.message);
+      else {
+        alert("Pendaftaran berhasil! Silakan login.");
+        setIsLogin(true);
+      }
+    }
+    setLoading(false);
+  };
+
   return (
     <main className="min-h-screen bg-[#BDD16D] font-sans flex items-center justify-center p-4 sm:p-6 border-[6px] sm:border-[8px] border-[#78B5D6]">
       <div className="bg-white w-full max-w-md rounded-3xl p-6 sm:p-8 border-4 border-[#78B5D6] shadow-xl relative overflow-hidden">
