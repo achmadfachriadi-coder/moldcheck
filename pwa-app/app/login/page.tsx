@@ -31,7 +31,7 @@ export default function LoginPage() {
         if (userRole === 'admin') {
           router.push('/dashboard-admin');
         } else {
-          router.push('/camera'); // Arahkan penghuni ke halaman kamera
+          router.push('/dashboard'); // Arahkan penghuni ke halaman kamera
         }
       }
     } else {
