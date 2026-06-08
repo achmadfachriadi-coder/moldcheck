@@ -1,6 +1,5 @@
 'use client';
 
-// Baris ini yang tadi hilang!
 import { useEffect, useState } from 'react'; 
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
@@ -19,9 +18,21 @@ export default function HistoryPage() {
   useEffect(() => {
     const ambilDataRiwayat = async () => {
       try {
+        // 1. Cek identitas akun yang sedang login saat ini
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+        // Jika tidak ada yang login, hentikan proses loading
+        if (authError || !user) {
+          console.warn("User belum login atau sesi habis.");
+          setIsLoading(false);
+          return;
+        }
+
+        // 2. Ambil data HANYA milik user tersebut (Filter dengan .eq)
         const { data, error } = await supabase
-          .from('riwayat_deteksi') // Mengambil dari tabel lama yang ada URL fotonya
+          .from('riwayat_deteksi')
           .select('*')
+          .eq('user_id', user.id) // INI KUNCI PENGAMANNYA!
           .order('id', { ascending: false });
 
         if (error) {
@@ -87,8 +98,8 @@ export default function HistoryPage() {
                   
                   <div className="flex-grow overflow-hidden">
                     <h3 className={`font-extrabold text-xl uppercase tracking-wider mb-0.5 truncate ${
-                      item.status_risiko === 'Tinggi' ? 'text-red-500' : 
-                      item.status_risiko === 'Sedang' ? 'text-[#FF9B71]' : 
+                      item.status_risiko === 'Berbahaya' || item.status_risiko === 'Tinggi' ? 'text-red-500' : 
+                      item.status_risiko === 'Waspada' || item.status_risiko === 'Sedang' ? 'text-[#FF9B71]' : 
                       'text-[#84A982]'
                     }`}>
                       {item.status_risiko}
