@@ -86,7 +86,7 @@ export default function LoadingAIPage() {
               
             const linkFotoAsli = publicUrlData.publicUrl;
 
-            // E. Simpan hasil skor, link foto, DAN user_id ke tabel Database
+            // E. Simpan hasil skor, link foto, user_id, DAN no_kamar ke tabel Database
             const { error: dbError } = await supabase
               .from('riwayat_deteksi')
               .insert([
@@ -94,7 +94,8 @@ export default function LoadingAIPage() {
                   skor: data.hasil_ai.skor,
                   status_risiko: data.hasil_ai.status_risiko,
                   image_url: linkFotoAsli,
-                  user_id: user ? user.id : null // <- Mengunci data agar hanya milik user ini
+                  user_id: user ? user.id : null,
+                  no_kamar: user?.user_metadata?.no_kamar || null // <-- INI DIA KABEL KETIGANYA!
                 }
               ]);
 

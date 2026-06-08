@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'penghuni' | 'admin'>('penghuni');
+  const [noKamar, setNoKamar] = useState(''); // State untuk Nomor Kamar
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [pesanError, setPesanError] = useState('');
@@ -20,30 +21,47 @@ export default function LoginPage() {
     setPesanError('');
 
     if (isLogin) {
+      // PROSES LOGIN
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setPesanError(error.message);
       else {
-        // Baca role dari Supabase metadata
         const userRole = data.user?.user_metadata?.role || 'penghuni';
         localStorage.setItem('userRole', userRole);
 
-        // Arahkan ke halaman yang sesuai
         if (userRole === 'admin') {
           router.push('/dashboard-admin');
         } else {
-          router.push('/dashboard'); // Arahkan penghuni ke halaman kamera
+          router.push('/dashboard'); 
         }
       }
     } else {
+      // PROSES PENDAFTARAN
+      // Validasi khusus penghuni: Nomor Kamar wajib diisi!
+      if (role === 'penghuni' && !noKamar.trim()) {
+        setPesanError("Anak Kos wajib mengisi Nomor Kamar!");
+        setLoading(false);
+        return;
+      }
+
       const { error } = await supabase.auth.signUp({ 
         email, 
         password,
-        options: { data: { role: role } }
+        options: { 
+          data: { 
+            role: role,
+            no_kamar: role === 'penghuni' ? noKamar : null // Simpan no_kamar hanya untuk penghuni
+          } 
+        }
       });
+      
       if (error) setPesanError(error.message);
       else {
         alert("Pendaftaran berhasil! Silakan login.");
         setIsLogin(true);
+        // Reset form setelah berhasil
+        setEmail('');
+        setPassword('');
+        setNoKamar('');
       }
     }
     setLoading(false);
@@ -58,6 +76,7 @@ export default function LoginPage() {
           <p className="text-[#84A982] text-sm sm:text-base font-bold">{isLogin ? 'Masuk ke akunmu' : 'Buat akun baru'}</p>
         </div>
 
+        {/* Toggle Role Hanya Muncul Saat Mode Daftar */}
         {!isLogin && (
           <div className="flex gap-2 mb-4 bg-gray-100 p-1 rounded-xl">
             <button 
@@ -95,17 +114,31 @@ export default function LoginPage() {
             />
           </div>
 
+          {/* INPUT NOMOR KAMAR: Hanya muncul jika Register dan Role = Penghuni */}
+          {!isLogin && role === 'penghuni' && (
+            <div>
+              <input 
+                type="text" required value={noKamar} onChange={(e) => setNoKamar(e.target.value)}
+                className="w-full bg-[#FFB6B9]/10 text-[#A61C40] placeholder-[#FF7AA2]/70 text-base sm:text-lg border-2 border-[#FF7AA2] rounded-xl p-3 sm:p-4 font-black focus:outline-none focus:border-[#A61C40] focus:ring-2 focus:ring-[#FF7AA2]/30 transition-all"
+                placeholder="No. Kamar (Cth: B-04)"
+              />
+            </div>
+          )}
+
           <button 
             type="submit" disabled={loading}
             className="w-full mt-2 bg-[#FF7AA2] text-white font-black text-lg p-4 rounded-xl border-4 border-[#333] shadow-[0_4px_0_#333] active:translate-y-1 active:shadow-none transition-all disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {loading ? 'Memproses...' : (isLogin ? 'Masuk 🚀' : 'Daftar Sebagai ' + role.toUpperCase())}
+            {loading ? 'Memproses...' : (isLogin ? 'Masuk 🚀' : 'Daftar Sekarang')}
           </button>
         </form>
 
         <button 
           type="button"
-          onClick={() => setIsLogin(!isLogin)}
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setPesanError(''); // Bersihkan error saat ganti mode
+          }}
           className="w-full mt-6 text-[#84A982] font-bold text-sm sm:text-base hover:text-[#6C96C2] transition-colors"
         >
           {isLogin ? 'Belum punya akun? Daftar' : 'Sudah punya akun? Masuk'}
