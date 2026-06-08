@@ -49,7 +49,7 @@ export default function LoginPage() {
         options: { 
           data: { 
             role: role,
-            no_kamar: role === 'penghuni' ? noKamar : null // Simpan no_kamar hanya untuk penghuni
+            nomor_kamar: role === 'penghuni' ? noKamar : null // Simpan no_kamar hanya untuk penghuni
           } 
         }
       });

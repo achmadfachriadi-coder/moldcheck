@@ -95,7 +95,7 @@ export default function LoadingAIPage() {
                   status_risiko: data.hasil_ai.status_risiko,
                   image_url: linkFotoAsli,
                   user_id: user ? user.id : null,
-                  no_kamar: user?.user_metadata?.no_kamar || null // <-- INI DIA KABEL KETIGANYA!
+                  nomor_kamar: user?.user_metadata?.nomor_kamar || null // <-- INI DIA KABEL KETIGANYA!
                 }
               ]);
 

@@ -10,7 +10,7 @@ interface Laporan {
   status_risiko: string;
   image_url: string;
   user_id: string;
-  no_kamar: string;
+  nomor_kamar: string;
 }
 
 export default function DashboardAdmin() {
@@ -121,7 +121,7 @@ export default function DashboardAdmin() {
                       {item.status_risiko}
                       <div className="flex flex-col gap-1 mt-1">
                       <p className="text-[#A61C40] font-black text-lg truncate bg-[#FFB6B9]/30 w-fit px-2 py-0.5 rounded-lg border-2 border-[#FFB6B9]">
-                        Kamar: {item.no_kamar || 'Tidak Diketahui'}
+                        Kamar: {item.nomor_kamar || 'Tidak Diketahui'}
                       </p>
                       <p className="text-[#6C96C2] font-bold text-xs truncate">
                         ID Laporan: #{item.id}
