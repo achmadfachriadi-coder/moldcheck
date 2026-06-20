@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'; 
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Riwayat {
   id: number;
@@ -12,6 +13,7 @@ interface Riwayat {
 }
 
 export default function HistoryPage() {
+  const { t } = useLanguage();
   const [dataRiwayat, setDataRiwayat] = useState<Riwayat[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -57,21 +59,21 @@ export default function HistoryPage() {
         
         <header className="mb-8 mt-4">
           <h1 className="text-4xl font-extrabold text-white tracking-wide mb-1 drop-shadow-sm">
-            Riwayat
+            {t.riwayat}
           </h1>
           <p className="text-[#6C96C2] font-bold text-lg">
-            Catatan kondisi kamar kos Anda.
+            {t.catatanKondisi}
           </p>
         </header>
 
         {isLoading ? (
           <div className="flex justify-center items-center h-40">
-            <p className="text-white font-black text-xl animate-pulse">Memuat data...</p>
+            <p className="text-white font-black text-xl animate-pulse">{t.memuatData}</p>
           </div>
         ) : dataRiwayat.length === 0 ? (
           <div className="bg-white/40 rounded-3xl p-8 text-center border-4 border-white/50 border-dashed">
-            <p className="text-[#84A982] font-bold text-lg mb-2">Belum ada riwayat.</p>
-            <p className="text-[#84A982] text-sm">Coba lakukan deteksi pertamamu sekarang!</p>
+            <p className="text-[#84A982] font-bold text-lg mb-2">{t.belumAdaRiwayat}</p>
+            <p className="text-[#84A982] text-sm">{t.cobaDeteksi}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -105,7 +107,7 @@ export default function HistoryPage() {
                       {item.status_risiko}
                     </h3>
                     <p className="text-[#6C96C2] font-bold text-xs truncate">
-                      ID Deteksi: #{item.id}
+                      {t.idDeteksi}: #{item.id}
                     </p>
                   </div>
 

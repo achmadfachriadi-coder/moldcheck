@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [pesanError, setPesanError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,12 +107,23 @@ export default function LoginPage() {
               placeholder="nama@email.com"
             />
           </div>
-          <div>
-            <input 
-              type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-50 text-gray-900 placeholder-gray-500 text-base sm:text-lg border-2 border-[#78B5D6] rounded-xl p-3 sm:p-4 font-bold focus:outline-none focus:border-[#6C96C2] focus:ring-2 focus:ring-[#6C96C2]/30 transition-all"
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'} required value={password} onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-gray-50 text-gray-900 placeholder-gray-500 text-base sm:text-lg border-2 border-[#78B5D6] rounded-xl p-3 sm:p-4 pr-12 font-bold focus:outline-none focus:border-[#6C96C2] focus:ring-2 focus:ring-[#6C96C2]/30 transition-all"
               placeholder="Password (min 6 huruf)"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#78B5D6] transition-colors p-1"
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              )}
+            </button>
           </div>
 
           {/* INPUT NOMOR KAMAR: Hanya muncul jika Register dan Role = Penghuni */}

@@ -2,64 +2,86 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function EdukasiPage() {
-  const categories = ["All", "Jamur", "Ventilasi", "Kelembapan"];
+  const { t, lang } = useLanguage();
+  const isEN = lang === 'EN';
+
+  const categoryKeys = ["All", "Jamur", "Ventilasi", "Kelembapan"];
+  const categoryLabels: Record<string, string> = isEN
+    ? { All: "All", Jamur: "Mold", Ventilasi: "Ventilation", Kelembapan: "Humidity" }
+    : { All: "All", Jamur: "Jamur", Ventilasi: "Ventilasi", Kelembapan: "Kelembapan" };
+
   const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const articles = [
-    { 
-      id: "black-mold-101", 
-      title: "Bahaya Black Mold terhadap Kesehatan", 
+    {
+      id: "black-mold-101",
+      title: isEN ? "Black Mold Dangers to Health" : "Bahaya Black Mold terhadap Kesehatan",
       category: "Jamur",
-      img: "https://placehold.co/100x80/FFB6B9/white?text=Jamur" 
+      img: "/images/black-mold.jpg"
     },
-    { 
-      id: "ventilasi-baik", 
-      title: "Cara Menjaga Ventilasi Kamar Kos Tetap Baik", 
+    {
+      id: "ventilasi-baik",
+      title: isEN ? "How to Keep Your Room's Ventilation Good" : "Cara Menjaga Ventilasi Kamar Kos Tetap Baik",
       category: "Ventilasi",
-      img: "https://placehold.co/100x80/78B5D6/white?text=Udara" 
+      img: "/images/ventilasi.jpg"
     },
-    { 
-      id: "kurangi-lembap", 
-      title: "Tips Praktis Mengurangi Kelembapan di Kos", 
+    {
+      id: "kurangi-lembap",
+      title: isEN ? "Practical Tips to Reduce Humidity in Your Room" : "Tips Praktis Mengurangi Kelembapan di Kos",
       category: "Kelembapan",
-      img: "https://placehold.co/100x80/84A982/white?text=Kering" 
+      img: "/images/kelembapan.jpg"
     },
-    { 
-      id: "kenali-tanda", 
-      title: "Kenali Tanda Awal Dinding Mulai Berjamur", 
+    {
+      id: "kenali-tanda",
+      title: isEN ? "Recognize Early Signs of Mold on Walls" : "Kenali Tanda Awal Dinding Mulai Berjamur",
       category: "Jamur",
-      img: "https://placehold.co/100x80/FFB6B9/white?text=Tanda" 
+      img: "/images/tanda-jamur.jpg"
     },
   ];
 
-  const filteredArticles = activeCategory === "All" 
-    ? articles 
-    : articles.filter(art => art.category === activeCategory);
+  const filteredArticles = articles.filter(art => {
+    const matchCategory = activeCategory === "All" || art.category === activeCategory;
+    const matchSearch = searchQuery === "" ||
+      art.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.category.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchCategory && matchSearch;
+  });
 
   return (
     <main className="min-h-screen bg-[#BDD16D] font-sans flex flex-col items-center relative">
       <div className="w-full max-w-md p-6 md:p-8 pb-32 flex flex-col min-h-screen">
         <header className="mb-6 mt-4">
-          <h1 className="text-4xl font-extrabold text-white tracking-wide mb-1 drop-shadow-sm">Education</h1>
-          <p className="text-[#6C96C2] font-bold text-lg">Pelajari cara menjaga kos sehat.</p>
+          <h1 className="text-4xl font-extrabold text-white tracking-wide mb-1 drop-shadow-sm">{t.education}</h1>
+          <p className="text-[#6C96C2] font-bold text-lg">{t.pelajariCara}</p>
         </header>
         
         <div className="relative mb-6">
-          <input type="text" placeholder="Search..." className="w-full bg-[#F9D66F] border-4 border-[#78B5D6] rounded-full py-3 px-12 text-[#FF7AA2] placeholder-[#FF7AA2]/60 font-bold focus:outline-none" />
+          <input
+            type="text"
+            placeholder={t.search}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#F9D66F] border-4 border-[#78B5D6] rounded-full py-3 px-12 text-[#FF7AA2] placeholder-[#FF7AA2]/60 font-bold focus:outline-none"
+          />
           <svg className="absolute left-4 top-4 text-[#FF7AA2] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
 
         <div className="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide">
-          {categories.map((cat) => (
+          {categoryKeys.map((cat) => (
             <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-5 py-2 rounded-full font-bold border-[3px] whitespace-nowrap transition-all ${activeCategory === cat ? 'bg-[#FF7AA2] text-white border-white' : 'bg-white/40 text-[#6C96C2] border-[#78B5D6]'}`}>
-              {cat}
+              {categoryLabels[cat]}
             </button>
           ))}
         </div>
 
         <div className="space-y-4">
+          {filteredArticles.length === 0 && (
+            <p className="text-center text-white font-bold mt-8">{t.artikelTidakDitemukan}</p>
+          )}
           {filteredArticles.map((art) => (
             <Link href={`/edukasi/${art.id}`} key={art.id} className="block group">
               <div className="bg-white rounded-[24px] p-3 flex gap-4 shadow-sm border-[4px] border-[#78B5D6] hover:scale-[1.02] hover:border-[#FF7AA2] transition-all">
@@ -67,7 +89,7 @@ export default function EdukasiPage() {
                   <img src={art.img} alt={art.category} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1 flex flex-col justify-center pr-2">
-                  <span className="text-[10px] font-black uppercase text-[#84A982] bg-[#BDD16D]/30 inline-block px-2 py-0.5 rounded-full mb-1 w-max">{art.category}</span>
+                  <span className="text-[10px] font-black uppercase text-[#84A982] bg-[#BDD16D]/30 inline-block px-2 py-0.5 rounded-full mb-1 w-max">{categoryLabels[art.category]}</span>
                   <h3 className="text-[#FF7AA2] font-black text-sm leading-tight">{art.title}</h3>
                 </div>
               </div>
