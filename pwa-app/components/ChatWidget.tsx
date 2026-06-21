@@ -64,7 +64,10 @@ export default function ChatWidget() {
         body: JSON.stringify({ messages: newMessages }),
       });
       const data = await res.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
+      const reply = res.ok && data.reply
+        ? data.reply
+        : (isEN ? 'Sorry, something went wrong. Please try again.' : 'Maaf, terjadi kesalahan. Coba lagi ya.');
+      setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch {
       setMessages(prev => [...prev, {
         role: 'assistant',

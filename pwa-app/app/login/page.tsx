@@ -30,9 +30,9 @@ export default function LoginPage() {
         localStorage.setItem('userRole', userRole);
 
         if (userRole === 'admin') {
-          router.push('/dashboard-admin');
+          window.location.href = '/dashboard-admin';
         } else {
-          router.push('/dashboard'); 
+          window.location.href = '/dashboard';
         }
       }
     } else {
