@@ -215,7 +215,7 @@ export default function ProfilePage() {
                     { label: isEN ? "Category" : "Kategori", value: isEN ? "Health & Smart Living" : "Kesehatan & Smart Living" },
                     { label: isEN ? "Platform" : "Platform", value: "PWA (Web App)" },
                     { label: isEN ? "AI Technology" : "Teknologi AI", value: "Computer Vision" },
-                    { label: isEN ? "Developer" : "Pengembang", value: "Tim MoldCheck 2024" },
+                    { label: isEN ? "Developer" : "Pengembang", value: "Tim MoldCheck 2026" },
                   ].map((row, i) => (
                     <div key={i} className="flex justify-between items-center">
                       <span className="text-[#84A982] font-bold text-sm">{row.label}</span>
