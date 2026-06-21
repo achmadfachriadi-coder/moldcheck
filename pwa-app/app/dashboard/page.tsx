@@ -12,10 +12,10 @@ const fetchLatestScan = async () => {
   if (!user) return null;
 
   const { data, error } = await supabase
-    .from('riwayat_scan')
+    .from('riwayat_deteksi')
     .select('*')
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+    .order('id', { ascending: false })
     .limit(1)
     .single();
 
