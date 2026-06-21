@@ -120,7 +120,7 @@ export default function LoadingAIPage() {
   // Animasi Progress Bar
   useEffect(() => {
     if (progress >= 100) {
-      router.push('/hasil-analisis');
+      router.replace('/hasil-analisis');
       return; 
     }
 

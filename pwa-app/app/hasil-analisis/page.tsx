@@ -103,7 +103,7 @@ export default function HasilAnalisisPage() {
         
         {/* Tombol Tutup (X) */}
         <button 
-          onClick={() => router.push('/dashboard')}
+          onClick={() => { window.location.href = '/dashboard'; }}
           className="absolute top-6 right-6 w-12 h-12 bg-white rounded-full border-4 border-[#78B5D6] flex items-center justify-center shadow-sm text-[#FF7AA2] hover:scale-105 transition-transform z-10"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
