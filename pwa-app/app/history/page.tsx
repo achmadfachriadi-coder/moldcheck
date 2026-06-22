@@ -31,15 +31,11 @@ export default function HistoryPage() {
         }
 
         // 2. Ambil data HANYA milik user tersebut (Filter dengan .eq)
-        console.log("Logged in user ID:", user.id, "Email:", user.email);
-
         const { data, error } = await supabase
           .from('riwayat_deteksi')
           .select('*')
           .eq('user_id', user.id)
           .order('id', { ascending: false });
-
-        console.log("Data ditemukan:", data?.length, "records", "Error:", error?.message);
 
         if (error) {
           console.error("Gagal mengambil data:", error.message);
