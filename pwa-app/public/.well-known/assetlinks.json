@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.moldcheck.app",
+    "sha256_cert_fingerprints": [
+      "BB:09:72:5F:55:C7:30:4B:52:C9:E7:1A:45:31:4B:4F:21:BB:B0:68:1E:CC:58:65:3A:22:7F:86:D8:95:A1:FF"
+    ]
+  }
+}]
