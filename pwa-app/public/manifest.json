@@ -2,7 +2,7 @@
   "name": "MoldCheck - Deteksi Jamur Kos",
   "short_name": "MoldCheck",
   "description": "Aplikasi AI untuk mendeteksi black mold di kamar kos",
-  "start_url": "/dashboard",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#BDD16D",
   "theme_color": "#78B5D6",
